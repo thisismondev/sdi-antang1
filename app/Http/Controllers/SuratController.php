@@ -53,10 +53,8 @@ class SuratController extends Controller
         $request->validate([
            'nomor_surat' => 'required|unique:surats',
            'nama_siswa' => auth()->user()->role == 'orang_tua' ? 'required' : 'nullable',
-
-'nis' => auth()->user()->role == 'orang_tua' ? 'required' : 'nullable',
-
-'kelas' => auth()->user()->role == 'orang_tua' ? 'required' : 'nullable',
+            'nis' => auth()->user()->role == 'orang_tua' ? 'required' : 'nullable',
+            'kelas' => auth()->user()->role == 'orang_tua' ? 'required' : 'nullable',
             'tanggal_surat' => 'required',
             'tanggal_sakit' => 'nullable',
             'lama_izin'     => 'nullable',
@@ -207,47 +205,35 @@ public function update(Request $request, Surat $surat)
     ]);
 
     $nilaiJenis = match ($request->jenis_surat) {
-
     'Surat Masuk' => 1,
     'Surat Keluar' => 2,
-
     'Dokumen Dana BOS' => 2,
-
     'Surat Pindah Masuk' => 3,
     'Surat Pindah Keluar' => 3,
-
     'Rekap Nilai' => 4,
     'Dokumen Kurikulum' => 4,
-
     'Surat Izin Guru' => 5,
     'Surat Izin Siswa' => 5,
     'Surat Keterangan Aktif Sekolah' => 5,
     'Surat Izin Lomba' => 5,
-
     'Dokumen Inovasi' => 6,
     'Dokumen Adiwiyata' => 6,
     'Dokumen Rapat' => 6,
-
     'Daftar Hadir PTK' => 7,
     'Daftar Hadir Siswa' => 7,
-
     'Buku Kunjungan Tamu' => 8,
-
     default => 9,
 };
-
     $nilaiUrgensi = match ($request->urgensi) {
         'Tinggi' => 1,
         'Sedang' => 2,
         default => 3,
     };
-
     $nilaiPengirim = match ($request->pengirim) {
         'Guru' => 1,
         'Orang Tua' => 2,
         default => 3,
     };
-
     $priorityScore = $nilaiJenis + $nilaiUrgensi + $nilaiPengirim;
 
 if ($request->hasFile('lampiran')) {
